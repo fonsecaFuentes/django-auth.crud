@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <main class="container">
+        <div class="row">
+            <div class="col-md-4 offset-md-4 mt-5">
+                {% if task.datecompleted is null %}
+                <form method="POST" class="card card-body">
+                {% else %}
+                <form method="POST" action="?from_page=task_complete" class="card card-body">
+                {% endif %}
+                    <h1 class="text-secondary">{{task.title}}</h1>
+                    <p>{{error}}</p>
+                    {% csrf_token %}
+                    {{form.as_p}}
+                    <button class="btn btn-dark">
+                        UPDATE
+                    </button>
+                </form>
+                {% if task.datecompleted is null %}
+                <form action="{% url 'complete_task' task.id %}" method="POST" class="card card-body">
+                    {% csrf_token %}
+                    <button class="btn btn-secondary">
+                        COMPLETE
+                    </button>
+                </form>
+                {% endif %}
+                {% if task.datecompleted is null %}
+                <form action="{% url 'delete_task' task.id %}" method="POST" class="card card-body">
+                {% else %}
+                <form action="{% url 'delete_task' task.id %}?from_page=task_complete" method="POST" class="card card-body">
+                {% endif %}
+                    {% csrf_token %}
+                    <button class="btn btn-danger">
+                        DELETE
+                    </button>
+                </form>
+            </div>
+        </div>
+    </main>
+{% endblock %}
